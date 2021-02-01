@@ -24,4 +24,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
 Route::get('/establecimientos/create', [App\Http\Controllers\EstablecimientoController::class,'create'])->name('establecimientos.crear');
 Route::get('/establecimientos/{establecimiento}/edit', [App\Http\Controllers\EstablecimientoController::class,'edit'])->name('establecimientos.edit');
+
+//subir imagen
+Route::post('/establecimientos/imagenes', [App\Http\Controllers\ImagenController::class,'store'])->name('establecimientos.imagen');
+//Eliminar imagen
+Route::post('/eliminarImagen/destroy', [App\Http\Controllers\ImagenController::class,'destroy'])->name('eliminar.imagen');
 });
