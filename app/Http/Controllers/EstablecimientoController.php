@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
-use App\Models\Establecimiento;
 use Illuminate\Http\Request;
+use App\Models\Establecimiento;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
 
 class EstablecimientoController extends Controller
 {
@@ -43,7 +45,40 @@ class EstablecimientoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+
+
+
+        $data=$request->validate([
+            'nombre' => 'required',
+            'imagen_principal'=>'required|image',
+            'direccion'=>'required',
+            'telefono'=>'required|numeric',
+            'descripcion'=>'required|min:50',
+            'apertura'=>'date_format:H:i',
+            'cierre'=>'date_format:H:i|after:apertura',
+            'uuid'=>'required|uuid',
+            'categoria'=> 'required|exists:App\Models\Categoria,id'
+        ]);
+
+        //guardar la imagen
+        $ruta_image=$request['imagen_principal']->store('principal', 'public');
+
+        //Rezise a la imagen
+        $imagen=Image::make(public_path("storage/{$ruta_image}"))->fit(800,450);
+        $imagen->save();
+
+        //guardar en la base de datos
+
+        $guardar= new Establecimiento($data);
+        $guardar->imagen_principal= $ruta_image;
+        $guardar->categoria_id= $data['categoria'];
+        $guardar->user_id= Auth::user()->id;
+        $guardar->save();
+
+
+        return back()->with('estado', 'tu informacion se almaceno correctamente');
     }
 
     /**

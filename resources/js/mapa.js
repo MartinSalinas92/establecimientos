@@ -29,12 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
             autoPan: true
         }).addTo(mapa);
 
+
+
         // Agregar el pin a las capas
         markers.addLayer(marker);
 
 
        // Geocode Service
        const geocodeService = L.esri.Geocoding.geocodeService();
+
+       //console.log(geocodeService);
 
        // Buscador de direcciones
        const buscador = document.querySelector('#formbuscador');
@@ -52,13 +56,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 // console.log(posicion);
 
                 // Centrar automaticamente
-                mapa.panTo( new L.LatLng( posicion.lat, posicion.lng ) );
+                mapa.panTo(new L.LatLng( posicion.lat, posicion.lng ) );
 
                 // Reverse Geocoding, cuando el usuario reubica el pin
                 geocodeService.reverse().latlng(posicion, 16).run(function(error, resultado) {
-                    // console.log(error);
+                    //console.log(error);
 
-                    console.log(resultado.address);
+                    console.log(resultado);
 
                     marker.bindPopup(resultado.address.LongLabel);
                     marker.openPopup();

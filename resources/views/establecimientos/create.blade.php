@@ -2,13 +2,14 @@
 
 @section('style')
 
+
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
 integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
 crossorigin=""/>
 
 <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder/dist/esri-leaflet-geocoder.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/dropzone.min.css" integrity="sha512-3g+prZHHfmnvE1HBLwUnVuunaPOob7dpksI7/v6UnF/rnKGwHf/GdEq9K7iEN7qTtW+S0iivTcGpeTBqqB04wA==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/dropzone.min.css" integrity="sha256-NkyhTCRnLQ7iMv7F3TQWjVq25kLnjhbKEVPqGJBcCUg=" crossorigin="anonymous" />
 
 
 
@@ -20,8 +21,8 @@ crossorigin=""/>
 
     <div class="row justify-content-center mt-5 ">
 
-        <form class="col-md-9 col-xs-12 card card-body">
-
+        <form action="{{route('establecimientos.store')}}" method="POST" enctype="multipart/form-data" class="col-md-9 col-xs-12 card card-body">
+            @csrf
             <fieldset class="border p-4">
                 <legend class="text-primary"> Nombre, Categoria e Imagen Principal</legend>
                 <div class="form-group">
@@ -60,8 +61,7 @@ crossorigin=""/>
                         <option disabled-selected> Seleccionar</option>
 
                         @foreach ($categoria as $item)
-                            <option
-                            value="{{ $item->id}}"
+                            <option value="{{$item->id}}"
                             {{old('categoria')==$item->id ? 'selected' : ''}}
 
 
@@ -141,6 +141,7 @@ crossorigin=""/>
                                 id="direccion"
                                 class="form-control @error('error') is-invalid @enderror"
                                 placeholder="barrio illia 2 mz 49 cs15"
+                                name="direccion"
                                 value="{{old('direccion')}}"
 
                             />
@@ -182,81 +183,82 @@ crossorigin=""/>
 
                     </div>
 
-                    <input type="hidden" name="lat" id="lat" value="{{old('lat')}}">
-                    <input type="hidden" name="lng" id="lng" value="{{old('lng')}}">
+                    <input type="hidden" id="lat" name="lat" value="{{old('lat')}}">
+                    <input type="hidden" id="lng" name="lng" value="{{old('lng')}}">
 
             </fieldset>
 
                     <fieldset class = "border p-4 mt-5 " >
                     <legend   class = "text-primary" > Información Establecimiento: </legend>
                         <div class = "form-group ">
-                            <label  for = "nombre" > Teléfono </label >
+                            <label> Teléfono </label >
                             <input
-                                type = " tel "
-                                class = " form-control @error ( ' telefono ' ) is-invalid   @enderror "
-                                id = " telefono "
+                                type = "tel"
+                                class = "form-control @error ( 'telefono' ) is-invalid   @enderror "
+                                id = "telefono "
                                 placeholder = "Teléfono Establecimiento"
-                                name = " telefono "
+                                name = "telefono"
                                 value = "{{ old( 'telefono' )}} "
                                 />
 
 
                                 @error ( 'telefono' )
-                                    <div class="feedback-inválido">
-                                        {{$message}}
+                                    <div class="feedback-inválido" role="alert">
+                                       <strong>{{$message}}</strong>
                                     </div >
                                 @enderror
                         </div>
 
 
                         <div  class = "form-group" >
-                            <label para = "nombre" > Descripción </label >
+                            <label> Descripción </label >
                             <textarea
                                 class = "form-control @error ( ' descripcion ' ) is-invalid @enderror"
                                 value = "descripcion"
+                                name="descripcion"
                             > {{ old( 'descripcion' )}}
                             </textarea >
 
                                 @error ( 'descripcion' )
-                                    <div  class = "feedback-inválido" >
-                                        {{ $message }}
+                                    <div  class = "feedback-inválido" role="alert">
+                                        <strong>{{$message}}</strong>
                                     </div >
                                 @enderror
                         </div >
 
                         <div  class = "form-group " >
-                            <label  for = " nombre " > Hora Apertura: </label >
+                            <label> Hora Apertura: </label >
                             <input
-                                type = " tiempo "
+                                type = "time"
                                 class = " form-control @error ( ' apertura ' ) is-invalid   @enderror "
-                                id = " apertura "
-                                name = " apertura "
+                                id = "apertura"
+                                name = "apertura"
                                 value = " {{ old( ' apertura ' ) }} ">
                             @error ( ' apertura ' )
-                                <div  class = "feedback-inválido ">
-                                    {{ $message }}
+                                <div  class = "feedback-inválido " role="alert">
+                                    <strong>{{$message}}</strong>
                                 </div >
                             @enderror
                         </div>
 
                         <div  class = " form-group " >
-                            <label  for = " nombre " > Hora de cierre: </label >
+                            <label> Hora de cierre: </label >
                             <input
-                                type = " tiempo "
+                                type = "time"
                                 class = " form-control @error ( 'cierre' ) is-invalid   @enderror "
-                                id = " cierre "
-                                name = " cierre "
+                                id = "cierre"
+                                name = "cierre"
                                 value = " {{ old ( 'cierre' ) }} "
                             >
                             @error ( ' cierre ' )
-                                <div  class = " feedback-inválido " >
-                                    {{$message }}
+                                <div  class = " feedback-inválido " role="alert">
+                                    <strong>{{$message}}</strong>
                                 </div >
                             @enderror
                         </div >
                     </fieldset >
 
-                    <input type="hidden" id="uuid" value="{{ Str::uuid()->toString()}}">
+                    <input type="hidden" id="uuid" name="uuid" value="{{ Str::uuid()->toString()}}">
 
                     <fieldset class = "border p-4 mt-5 " >
                         <legend   class = "text-primary" > Información Establecimiento: </legend>
@@ -282,13 +284,12 @@ crossorigin=""/>
 
 @section('script')
 
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-  crossorigin=""></script>
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+crossorigin=""></script>
 
-  <!--Cargar el folleto de Esri desde CDN -->
-  <script src="https://unpkg.com/esri-leaflet" defer></script>
-  <script src="https://unpkg.com/esri-leaflet-geocoder" defer></script>
+<script src="https://unpkg.com/esri-leaflet"></script>
+<script src="https://unpkg.com/esri-leaflet-geocoder"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.2/min/dropzone.min.js" integrity="sha512-9WciDs0XP20sojTJ9E7mChDXy6pcO0qHpwbEJID1YVavz2H6QBz5eLoDD8lseZOb2yGT8xDNIV7HIe1ZbuiDWg==" crossorigin="anonymous" >
 
