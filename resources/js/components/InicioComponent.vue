@@ -1,9 +1,8 @@
 <template>
 
 <div>
+    <router-view></router-view>
 
-  <categoria-cafe></categoria-cafe>
-  <categoria-hotel></categoria-hotel>
 
 </div>
 
@@ -12,19 +11,19 @@
 
 <script>
 
-    import CategoriaCafe from './CategoriaCafe';
-    import CategoriaHotel from './CategoriaHotel';
+
+
+
+    //importamos el store
+    import store from '../store';
 
 
 
     export default {
 
-        components :{
+        store,
 
-            CategoriaCafe,
-            CategoriaHotel
 
-        }
 
     }
 

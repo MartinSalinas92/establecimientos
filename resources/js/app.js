@@ -8,6 +8,8 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
+import router from './router';
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -30,6 +32,7 @@ Vue.component('iniciocomponentes', require('./components/InicioComponent').defau
 
 const app = new Vue({
     el: '#app',
+    router
 });
 
 

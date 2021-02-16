@@ -1,7 +1,7 @@
 <template>
         <div class="container my-5">
 
-            <h2>Cafes</h2>
+            <h2>Hoteles</h2>
 
             <div class="row">
                 <div class="col-md-4 mt-4" v-for="infos in info" v-bind:key="infos.id">
@@ -18,8 +18,13 @@
 
 
                             </p>
+                            <router-link :to="{name:'establecimiento', params:{id: infos.id}}">
+                                 <a href="#" class="btn btn-primary d-block"> Ver Lugar</a>
+
+                            </router-link>
 
                         </div>
+
 
                     </div>
 
@@ -34,33 +39,23 @@
 <script>
 export default {
 
-    data(){
+mounted(){
 
-        return{
-
-            info:[]
-
-        }
-
-    },
-
-    mounted(){
-
-        this.MostrarCafe();
+        this.MostrarHoteles();
 
 
     },
 
     methods:{
 
-        MostrarCafe(){
+        MostrarHoteles(){
 
-            axios.get('api/categoria/cafes')
+            axios.get('api/categoria/hoteles')
             .then(res=>{
 
-                    console.log(res.data);
+                    //console.log(res.data);
 
-                    this.info=res.data
+                    this.$store.commit('agregar_hoteles',res.data)
 
 
             })
@@ -69,7 +64,16 @@ export default {
             })
         }
 
-    }
+
+
+    },
+
+      computed:{
+
+            info(){
+                return this.$store.state.info;
+            }
+        }
 
 }
 </script>
